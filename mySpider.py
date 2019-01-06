@@ -126,12 +126,13 @@ def test(issn):
 """
 def job():
     ISSNs = pd.read_csv('./issn.csv')
+    savedFilename="./res1.csv"
     dataList=[]
     index=0
     files=0
     names=['ISSN','全名','中文全名','年文章量','投稿难易度','初审周期','主页']
     resFile=pd.DataFrame(columns=names,data=dataList)
-    resFile.to_csv("./res.csv",mode='a+',index=False)
+    resFile.to_csv(savedFilename,mode='a+',index=False)
     for issn in ISSNs['issn']:
         HtmlStr=getData(issn)
         enFullName,NumOfPapers,EasyOrHard,ReviewTime,HomePage=parseHtml(HtmlStr)
@@ -142,13 +143,13 @@ def job():
         index=index+1
         if index % 30 == 0:
             resFile=pd.DataFrame(data=dataList)
-            resFile.to_csv("./res.csv",mode='a+',header=False, index=False)
+            resFile.to_csv(savedFilename,mode='a+',header=False, index=False)
             dataList=[]
             print("第{}次保存".format(files))
             files=files+1
     if len(dataList)!=0:
         resFile=pd.DataFrame(data=dataList)
-        resFile.to_csv("./res.csv",mode='a+',header=False, index=False)
+        resFile.to_csv(savedFilename,mode='a+',header=False, index=False)
         print("剩余数据保存完毕")
     print("全部处理完毕")
 
@@ -156,5 +157,5 @@ def job():
 入口
 """  
 if __name__ == "__main__":
-    #job()  # 工作
-    test("2168-7161")  # 测试
+    job()  # 工作
+    #test("1542-3980")  # 测试
